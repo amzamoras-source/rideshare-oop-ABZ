@@ -1,4 +1,5 @@
-from ride import Ride
+
+from base_ride import Ride
 
 
 class PremiumRide(Ride):
@@ -13,20 +14,14 @@ class PremiumRide(Ride):
         return self.__premium_base_rate + (self.distance_km * 3.00)
 
     def start_ride(self):
-        print("Starting VIP Premium Ride. Enjoy your snacks!")
+        print(f"Starting VIP Premium Ride for {self.distance_km} km. Enjoy your snacks!")
 
     def complete_ride(self):
-        print("=== VIP RECEIPT ===")
+        fare = self.calculate_fare()
+        self.is_completed = True
+
+        print("=== VIP PREMIUM RECEIPT ===")
         print(f"Distance: {self.distance_km} km")
-        print(f"Fare: Php {self.calculate_fare():.2f}")
+        print(f"Fare: ₱{fare:.2f}")
         print(f"Complimentary Snack: {self.__complimentary_snack}")
-
-
-from premium_ride import PremiumRide
-
-vip = PremiumRide(10, "Chocolate Bar")
-
-vip.start_ride()
-
-# Complete the ride
-vip.complete_ride()
+        print("Ride completed successfully.")
