@@ -4,15 +4,12 @@ from ride import Ride
 class PremiumRide(Ride):
 
     def __init__(self, distance_km, snack):
-        # Initialize the parent class
         super().__init__(distance_km)
 
-        # Private attributes
         self.__premium_base_rate = 15.00
         self.__complimentary_snack = snack
 
     def calculate_fare(self):
-        # ppremium fare = base rate + distance charge
         return self.__premium_base_rate + (self.distance_km * 3.00)
 
     def start_ride(self):
@@ -27,10 +24,8 @@ class PremiumRide(Ride):
 
 from premium_ride import PremiumRide
 
-# Create a premium ride
 vip = PremiumRide(10, "Chocolate Bar")
 
-# start the ride
 vip.start_ride()
 
 # Complete the ride
