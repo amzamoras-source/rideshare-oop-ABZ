@@ -115,3 +115,17 @@ class PremiumRide(Ride):
         print(f"Fare: Php {self.calculate_fare():.2f}")
         print(f"Complimentary Snack: {self.__complimentary_snack}")
 
+class RideDispatcher:
+    def process_ride_request(self, ride_list):
+        print("--- Dispatching Ride Queue ---")
+
+        total_revenue = 0.0
+
+        for ride in ride_list:
+            ride.start_ride()
+            total_revenue += ride.calculate_fare()
+            ride.complete_ride()
+
+        print(f"Total Revenue for this batch: php{total_revenue:.2f}")
+        return total_revenue
+
