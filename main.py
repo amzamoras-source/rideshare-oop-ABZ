@@ -115,6 +115,16 @@ class PremiumRide(Ride):
         print(f"Fare: Php {self.calculate_fare():.2f}")
         print(f"Complimentary Snack: {self.__complimentary_snack}")
 
+from premium_ride import PremiumRide
+
+vip = PremiumRide(10, "Chocolate Bar")
+
+vip.start_ride()
+
+# Complete the ride
+vip.complete_ride()
+
+
 class RideDispatcher:
     def process_ride_request(self, ride_list):
         print("--- Dispatching Ride Queue ---")
