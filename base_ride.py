@@ -1,6 +1,7 @@
 
 from abc import ABC, abstractmethod
 
+
 class Ride(ABC):
 
     def __init__(self, distance_km: float):
