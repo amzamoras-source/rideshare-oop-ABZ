@@ -19,6 +19,7 @@ class Ride(ABC):
     def complete_ride(self):
         pass
 
+
 class PassengerAccount:
 
     def __init__(self, name):
@@ -26,7 +27,6 @@ class PassengerAccount:
         self.__wallet_balance = 0.0  
 
     def top_up_wallet(self, amount):
-
         if amount < 0:
             raise ValueError("Amount cannot be negative.")
 
@@ -36,7 +36,6 @@ class PassengerAccount:
         print(f"Current balance: ₱{self.__wallet_balance:.2f}")
 
     def pay_for_ride(self, fare_amount):
-
         if fare_amount < 0:
             raise ValueError("Fare cannot be negative.")
 
@@ -52,7 +51,9 @@ class PassengerAccount:
     def wallet_balance(self):
         return self.__wallet_balance
 
+
 class DriverAccount:
+
     def __init__(self, name, vehicle_plate):
         self.name = name
         self.vehicle_plate = vehicle_plate
@@ -61,7 +62,7 @@ class DriverAccount:
 
     def add_rating(self, new_rating):
         if new_rating < 1.0 or new_rating > 5.0:
-            raise ValueError("Rating must be between 1.0 and 5.0")
+            raise ValueError("Invalid rating! Must be between 1.0 and 5.0")
         
         self.__rating = (self.__rating * self.__total_trips + new_rating) / (self.__total_trips + 1)
         self.__total_trips += 1
@@ -74,13 +75,12 @@ class DriverAccount:
     def total_trips(self):
         return self.__total_trips
 
-    def print_rating_info(self):
-        print(f"Driver: {self.name}, Average Rating: {self.__rating:.2f}, Total Trips: {self.__total_trips}")
-
-from base_ride import Ride
+    def get_rating_info(self):
+        return f"Driver: {self.name}, Average Rating: {self.__rating:.2f}, Total Trips: {self.__total_trips}"
 
 
 class StandardRide(Ride):
+
     def __init__(self, distance_km):
         super().__init__(distance_km)
         self.__base_rate = 5.00
@@ -92,8 +92,9 @@ class StandardRide(Ride):
         print(f"Starting a standard ride for {self.distance_km} km.")
 
     def complete_ride(self):
+        self.is_completed = True
         print(f"===STANDARD RECEIPT===\nFare: Php{self.calculate_fare():.2f}")
-from ride import Ride
+
 
 class PremiumRide(Ride):
 
@@ -110,23 +111,16 @@ class PremiumRide(Ride):
         print("Starting VIP Premium Ride. Enjoy your snacks!")
 
     def complete_ride(self):
+        self.is_completed = True
         print("=== VIP RECEIPT ===")
         print(f"Distance: {self.distance_km} km")
         print(f"Fare: Php {self.calculate_fare():.2f}")
         print(f"Complimentary Snack: {self.__complimentary_snack}")
 
-from premium_ride import PremiumRide
-
-vip = PremiumRide(10, "Chocolate Bar")
-
-vip.start_ride()
-
-# Complete the ride
-vip.complete_ride()
-
 
 class RideDispatcher:
-    def process_ride_request(self, ride_list):
+
+    def process_ride_queue(self, ride_list):
         print("--- Dispatching Ride Queue ---")
 
         total_revenue = 0.0
@@ -139,3 +133,30 @@ class RideDispatcher:
         print(f"Total Revenue for this batch: php{total_revenue:.2f}")
         return total_revenue
 
+
+# --- Integration & Testing ---
+passenger = PassengerAccount("Juan")
+passenger.top_up_wallet(100.0)
+passenger.pay_for_ride(20.0)
+
+driver = DriverAccount("Carlos", "ABC-1234")
+driver.add_rating(4.5)
+driver.add_rating(5.0)
+print(driver.get_rating_info())
+
+print()
+
+friday_night_queue = [
+    StandardRide(4.0),
+    PremiumRide(6.0, "Chips"),
+    StandardRide(10.0),
+    PremiumRide(8.5, "Soda")
+]
+
+dispatcher = RideDispatcher()
+dispatcher.process_ride_queue(friday_night_queue)
+
+# Uncomment below one at a time to test valueError blocks:
+# passenger.top_up_wallet(-50.0)
+# passenger.pay_for_ride(500.0)
+# driver.add_rating(10.0)
